@@ -315,7 +315,9 @@ def saves_dir():
 
 
 def cmd_repack(args):
-    cmd = ["uv", "run", "--with", "tabletop-tools~=0.7.1", "tts", "repack"]
+    # tabletop-tools depends on bson 0.5.10, whose setup.py uses pkgutil.find_loader
+    # (removed in Python 3.14), so build it on 3.13 regardless of the default python.
+    cmd = ["uv", "run", "--python", "3.13", "--with", "tabletop-tools~=0.7.1", "tts", "repack"]
     print("$", " ".join(cmd))
     subprocess.run(cmd, cwd=REPO, check=True)
     out = BUILD / "packed-savegame.json"
