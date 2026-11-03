@@ -5073,7 +5073,10 @@ function BoardCallback(obj, pos, rot, extra, scaleOrigin)
     obj.setRotationSmooth(rot, false, true)
     local scaleFactor = scaleFactors[SetupChecker.getVar("optionalScaleBoard")]
     obj.setPositionSmooth(scaleFactor.position*pos + (1-scaleFactor.position)*scaleOrigin, false, true)
-    Wait.condition(function() setupMap(obj,extra) end, function() return obj.resting and not obj.loading_custom end)
+    -- A locked board does not always report `resting` once its smooth move ends
+    -- (seen with the 5-board Balanced layout), which left setup stuck at 4/5
+    -- boards. Treat the end of the smooth move as good enough.
+    Wait.condition(function() setupMap(obj,extra) end, function() return (obj.resting or not obj.isSmoothMoving()) and not obj.loading_custom end)
 end
 function setupMap(map, extra)
     _G["setupMapCo"] = function()
