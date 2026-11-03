@@ -9,6 +9,11 @@ To build the mod::
 
 This will put the module at ``build/packed-savegame.json``. You can also pass a path for where to build the module.
 
+``tabletop-tools`` 0.7.1 depends on ``bson`` 0.5.10, which does not build on
+Python 3.14 or newer. With ``uv`` run it on 3.13::
+
+    $ uv run --python 3.13 --with "tabletop-tools~=0.7.1" tts repack
+
 You can also use::
 
     $ tts unpack <...path/to/savegame.json...>
